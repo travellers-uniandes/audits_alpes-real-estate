@@ -11,9 +11,9 @@ def suscribirse_a_eventos():
     client = None
     try:
         client = pulsar.Client(f'pulsar://{utils.broker_host()}:6650')
-        consumer = client.subscribe('eventos-reserva', consumer_type=_pulsar.ConsumerType.Shared,
-                                       subscription_name='aeroalpes-sub-eventos',
-                                       schema=AvroSchema(EventoReservaCreada))
+        consumer = client.subscribe('audit-events', consumer_type=_pulsar.ConsumerType.Shared,
+                                    subscription_name='audit-sub-events',
+                                    schema=AvroSchema(EventoReservaCreada))
 
         while True:
             mensaje = consumer.receive()
@@ -33,9 +33,9 @@ def suscribirse_a_comandos():
     client = None
     try:
         client = pulsar.Client(f'pulsar://{utils.broker_host()}:6650')
-        consumer = client.subscribe('comandos-reserva', consumer_type=_pulsar.ConsumerType.Shared,
-                                       subscription_name='aeroalpes-sub-comandos',
-                                       schema=AvroSchema(ComandoCrearReserva))
+        consumer = client.subscribe('audit-commands', consumer_type=_pulsar.ConsumerType.Shared,
+                                    subscription_name='audit-sub-commands',
+                                    schema=AvroSchema(ComandoCrearReserva))
 
         while True:
             mensaje = consumer.receive()

@@ -17,7 +17,6 @@ bp = apiflask.create_blueprint('audit_router', '/audits')
 def get_audits():
     query_resultado = execute_query(GetAudits())
     map_audits = MapApp()
-
     return map_audits.dto_to_external(query_resultado.resultado)
 
 
@@ -25,7 +24,6 @@ def get_audits():
 def get_audit(audit_id: int):
     query_resultado = execute_query(GetAudit(audit_id))
     map_audit = MapApp()
-
     return map_audit.dto_to_external(query_resultado.resultado)
 
 
