@@ -2,5 +2,5 @@ from abc import ABC
 from app.seedwork.domain.repositories import Repository
 
 
-class ListRepository(Repository, ABC):
+class AuditRepository(Repository, ABC):
     ...

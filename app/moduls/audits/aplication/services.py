@@ -2,8 +2,8 @@ from app.seedwork.aplication.services import Service
 from ..aplication.dto import AuditDTO
 from app.moduls.audits.domain.factories import AuditFactory
 from app.moduls.audits.infrastructure.factories import RepositoryFactory
-from ..domain.repositories import ListRepository
-from .mappers import MapeadorEstate
+from ..domain.repositories import AuditRepository
+from .mappers import MapperAudit
 
 
 class AuditService(Service):
@@ -21,5 +21,5 @@ class AuditService(Service):
         return self._audit_factories
 
     def get_audits(self) -> AuditDTO:
-        repository = self.repository_factory.create_object(ListRepository.__class__)
-        return self.audit_factory.create_object(repository.get_all(), MapeadorEstate())
+        repository = self.repository_factory.create_object(AuditRepository.__class__)
+        return self.audit_factory.create_object(repository.get_all(), MapperAudit())

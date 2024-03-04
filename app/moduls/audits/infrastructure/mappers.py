@@ -5,7 +5,7 @@ from .dto import Estate as EstateDTO, List_estates as List_estatesDTO, Audit as 
 from datetime import datetime
 
 
-class MapeadorEstate(RepMap):
+class MapperAudit(RepMap):
     _FORMATO_FECHA = '%Y-%m-%dT%H:%M:%SZ'
 
     def _procesar_estates(self, list_estate: List_estates) -> EstateDTO:
@@ -15,7 +15,7 @@ class MapeadorEstate(RepMap):
         return [Estate(estate_id=str(item.id), code=item.code, name=item.name) for item in list_estate_dto]
 
     def get_type(self) -> type:
-        return List_estates.__class__
+        return ListAudits.__class__
 
     def entity_to_dto(self, list_entidad: List_estates) -> List_estatesDTO:
         list_dto = List_estatesDTO()

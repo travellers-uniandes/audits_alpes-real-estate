@@ -19,11 +19,11 @@ class MapperAuditDTOJson(AppMap):
 
         return list_dto
 
-    def dto_to_external(self, dto: ListDTO) -> dict:
+    def dto_to_external(self, dto: AuditDTO) -> dict:
         return dto
 
 
-class MapeadorEstate(RepMap):
+class MapperAudit(RepMap):
     _FORMATO_FECHA = '%Y-%m-%dT%H:%M:%SZ'
 
     def _procesar_estates(self, estate_dto: AuditDTO) -> Estate:
