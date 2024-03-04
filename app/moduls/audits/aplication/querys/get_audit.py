@@ -7,19 +7,18 @@ from app.moduls.audits.aplication.mappers import MapperAudit
 
 
 @dataclass
-class GetEstate(Query):
+class GetAudit(Query):
     id: str
 
 
-class getEstatesHandler(ReservaQueryBaseHandler):
-    def handle(self, query: GetEstate
-               ) -> QueryResultado:
+class GetAuditsHandler(ReservaQueryBaseHandler):
+    def handle(self, query: GetAudit) -> QueryResultado:
         repositorio = self._repository_factory.create_object(AuditRepository.__class__)
-        reserva = self._list_factories.create_object(repositorio.get_all(), MapperAudit())
+        reserva = self._audit_factories.create_object(repositorio.get_all(), MapperAudit())
         return QueryResultado(resultado=reserva)
 
 
-@query.register(GetEstate)
-def execute_query_get_list(query: GetEstate):
-    handler = getEstatesHandler()
+@query.register(GetAudit)
+def execute_query_get_list(query: GetAudit):
+    handler = GetAuditsHandler()
     return handler.handle(query)

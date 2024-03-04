@@ -2,8 +2,7 @@ import app.seedwork.presentation.apiflask as apiflask
 import json
 from flask import request
 from flask import Response
-from app.moduls.audits.aplication.querys.get_states import GetEstate
-from app.moduls.audits.aplication.services import AuditService
+from app.moduls.audits.aplication.querys.get_audits import GetAudits
 from app.moduls.audits.aplication.mappers import MapperAuditDTOJson as MapApp
 from app.moduls.audits.aplication.commands.create_audit import CreateAudit
 from app.seedwork.domain.exceptions import DomainException
@@ -14,18 +13,19 @@ bp = apiflask.create_blueprint('audit_router', '/audits')
 
 
 @bp.route("/", methods=('GET',))
-def get_audit():
-    map_audits = MapApp()
-    sr = AuditService()
-    return map_audits.dto_to_external(sr.get_audits())
-
-
-@bp.route("/query", methods=('GET',))
-def get_audit_query(audit_id=None):
-    query_resultado = execute_query(GetEstate(audit_id))
+def get_audits():
+    query_resultado = execute_query(GetAudits())
     map_audits = MapApp()
 
     return map_audits.dto_to_external(query_resultado.resultado)
+
+
+# @bp.route("/", methods=('GET',))
+# def get_audits(audit_id=None):
+#     query_resultado = execute_query(GetAudits(audit_id))
+#     map_audits = MapApp()
+#
+#     return map_audits.dto_to_external(query_resultado.resultado)
 
 
 @bp.route("/command", methods=('POST',))
