@@ -5,7 +5,7 @@ from flask import Response
 from app.moduls.audits.aplication.querys.get_states import GetEstate
 from app.moduls.audits.aplication.services import AuditService
 from app.moduls.audits.aplication.mappers import MapperAuditDTOJson as MapApp
-from app.moduls.audits.aplication.commands.create_estate import CreateEstate
+from app.moduls.audits.aplication.commands.create_audit import CreateAudit
 from app.seedwork.domain.exceptions import DomainException
 from app.seedwork.aplication.commands import execute_command
 from app.seedwork.aplication.queries import execute_query
@@ -35,7 +35,7 @@ def create_audit():
         map_audit = MapApp()
         audit_dto = map_audit.external_to_dto(audit_dict)
 
-        command = CreateEstate(audit_dto)
+        command = CreateAudit(audit_dto)
         execute_command(command)
         return Response('{}', status=201, mimetype='application/json')
     except DomainException as e:
