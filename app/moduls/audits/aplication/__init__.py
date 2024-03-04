@@ -1,8 +1,8 @@
 from pydispatch import dispatcher
 from .handlers import HandlerAuditIntegration
-from app.moduls.audits.domain.events import ReservaCreada, ReservaCancelada, ReservaAprobada, ReservaPagada
+from app.moduls.audits.domain.events import AuditCreated, AuditCanceled, AuditApproved, AuditPaid
 
-dispatcher.connect(HandlerAuditIntegration.handle_audit_created, signal=f'{ReservaCreada.__name__}Integration')
-dispatcher.connect(HandlerAuditIntegration.handle_audit_canceled, signal=f'{ReservaCancelada.__name__}Integration')
-dispatcher.connect(HandlerAuditIntegration.handle_audit_paid, signal=f'{ReservaPagada.__name__}Integration')
-dispatcher.connect(HandlerAuditIntegration.handle_audit_approved, signal=f'{ReservaAprobada.__name__}Integration')
+dispatcher.connect(HandlerAuditIntegration.handle_audit_created, signal=f'{AuditCreated.__name__}Integration')
+dispatcher.connect(HandlerAuditIntegration.handle_audit_canceled, signal=f'{AuditCanceled.__name__}Integration')
+dispatcher.connect(HandlerAuditIntegration.handle_audit_paid, signal=f'{AuditPaid.__name__}Integration')
+dispatcher.connect(HandlerAuditIntegration.handle_audit_approved, signal=f'{AuditApproved.__name__}Integration')

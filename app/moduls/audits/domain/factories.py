@@ -14,7 +14,7 @@ class _AuditFactory(Factory):
         else:
             list_estates: ListAudits = mapper.dto_to_entity(obj)
             # This session is for validate the business rules
-            # Example self.validate_rule(EstateMinOne(Estate.code))
+            # Example self.validate_rule(AuditMinOne(Audit.code))
             return list_estates
 
 

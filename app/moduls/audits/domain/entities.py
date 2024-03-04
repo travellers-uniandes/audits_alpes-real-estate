@@ -1,7 +1,7 @@
 from __future__ import annotations
 from dataclasses import dataclass, field
 from datetime import datetime
-from app.moduls.audits.domain.events import ReservaCreada
+from app.moduls.audits.domain.events import AuditCreated
 from app.seedwork.domain.entities import Entity, RootAggregation
 
 
@@ -26,4 +26,4 @@ class ListAudits(RootAggregation):
         #     self.updatedAt = None #datetime.strftime(datetime.now(), '%Y-%m-%d %H:%M:%S')
 
         #     self.estates.append(estate)
-        self.add_events(ReservaCreada(id=1, id_reserva="1", id_cliente="1", estado="funciona", fecha_creacion=datetime.now()))
+        self.add_events(AuditCreated(id=1, id_reserva="1", id_cliente="1", estado="funciona", fecha_creacion=datetime.now()))

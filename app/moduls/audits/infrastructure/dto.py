@@ -2,34 +2,6 @@ from app.config.db import db
 
 Base = db.Model
 
-list_estates_estate = db.Table(
-    "list_estates_estates",
-    db.Model.metadata,
-    db.Column("id", db.String, db.ForeignKey("list_estates.id")),
-    db.Column("estate_id", db.String, nullable=False),
-    db.Column("code", db.String, nullable=False),
-    db.Column("name", db.String, nullable=False),
-    db.ForeignKeyConstraint(
-        ["estate_id", "code", "name"],
-        ["estate.estate_id", "estate.code", "estate.name"]
-    )
-)
-
-
-class Estate(Base):
-    __tablename__ = "estate"
-    estate_id = db.Column(db.String, primary_key=True)
-    code = db.Column(db.String, primary_key=True)
-    name = db.Column(db.String, primary_key=True)
-
-
-class List_estates(Base):
-    __tablename__ = "list_estates"
-    id = db.Column(db.String, primary_key=True)
-    createdAt = db.Column(db.DateTime, nullable=False)
-    updatedAt = db.Column(db.DateTime, nullable=False)
-    estates = db.relationship('Estate', secondary=list_estates_estate, backref='lists')
-
 
 class Location(Base):
     __tablename__ = "locations"

@@ -1,5 +1,5 @@
 from app.config.db import db
-from .dto import List_estates as List_estatesDTO, Audit
+from .dto import Audit as AuditDTO
 from ..domain.entities import ListAudits
 from ..domain.repositories import AuditRepository
 from ..domain.factories import AuditFactory
@@ -16,15 +16,15 @@ class AuditRepositoryPostgres(AuditRepository):
         return self._audits_factory
 
     def get_by_id(self, entity_id: int) -> ListAudits:
-        list_estate_dto = db.session.query(List_estatesDTO).filter_by(id=str(entity_id)).one()
+        list_estate_dto = db.session.query(AuditDTO).filter_by(id=str(entity_id)).one()
         try:
             estate_list_entity = self.estates_factory.create_object(list_estate_dto, MapperAudit())
         except Exception as e:
             print("Error: ", e)
         return estate_list_entity
 
-    def get_all(self) -> list[Audit]:
-        audit_dtos = db.session.query(Audit).all()
+    def get_all(self) -> list[AuditDTO]:
+        audit_dtos = db.session.query(AuditDTO).all()
         try:
             audit_entities = self.estates_factory.create_object(audit_dtos, MapperAudit())
             return audit_entities

@@ -1,7 +1,7 @@
 import uuid
 from app.seedwork.domain.repositories import Mapper as RepMap
 from app.moduls.audits.domain.entities import ListAudits
-from .dto import List_estates as List_estatesDTO, Audit as AuditDTO, Audit
+from .dto import Audit as AuditDTO
 from datetime import datetime
 
 
@@ -11,8 +11,8 @@ class MapperAudit(RepMap):
     def get_type(self) -> type:
         return ListAudits.__class__
 
-    def entity_to_dto(self, list_entidad: ListAudits) -> List_estatesDTO:
-        list_dto = List_estatesDTO()
+    def entity_to_dto(self, list_entidad: ListAudits) -> AuditDTO:
+        list_dto = AuditDTO()
         list_dto.estates = list()
 
         if not list_entidad:
