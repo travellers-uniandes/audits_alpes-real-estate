@@ -2,6 +2,7 @@ import app.seedwork.presentation.apiflask as apiflask
 import json
 from flask import request
 from flask import Response
+from app.moduls.audits.aplication.querys.get_audit import GetAudit
 from app.moduls.audits.aplication.querys.get_audits import GetAudits
 from app.moduls.audits.aplication.mappers import MapperAuditDTOJson as MapApp
 from app.moduls.audits.aplication.commands.create_audit import CreateAudit
@@ -20,12 +21,12 @@ def get_audits():
     return map_audits.dto_to_external(query_resultado.resultado)
 
 
-# @bp.route("/", methods=('GET',))
-# def get_audits(audit_id=None):
-#     query_resultado = execute_query(GetAudits(audit_id))
-#     map_audits = MapApp()
-#
-#     return map_audits.dto_to_external(query_resultado.resultado)
+@bp.route("/<int:audit_id>", methods=('GET',))
+def get_audit(audit_id: int):
+    query_resultado = execute_query(GetAudit(audit_id))
+    map_audit = MapApp()
+
+    return map_audit.dto_to_external(query_resultado.resultado)
 
 
 @bp.route("/command", methods=('POST',))

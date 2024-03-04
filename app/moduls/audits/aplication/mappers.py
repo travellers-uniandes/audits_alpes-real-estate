@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Union
 from app.seedwork.aplication.dto import Mapper as AppMap
 from app.seedwork.domain.repositories import Mapper as RepMap
 from app.moduls.audits.domain.entities import ListAudits, Audit
@@ -10,7 +11,9 @@ class MapperAuditDTOJson(AppMap):
         list_dto = AuditDTO()
         return list_dto
 
-    def dto_to_external(self, dto: AuditDTO) -> dict:
+    def dto_to_external(self, dto: AuditDTO) -> Union[dict, AuditDTO]:
+        if isinstance(dto, AuditDTO):
+            return dto.__dict__
         return dto
 
 
@@ -20,11 +23,8 @@ class MapperAudit(RepMap):
     def get_type(self) -> type:
         return Audit.__class__
 
-    def entity_to_dto(self, list_entidad: ListAudits) -> AuditDTO:
-        list_dto = AuditDTO()
-
-        estate_dto = AuditDTO(name=list_dto.name, code=list_dto.code)
-
+    def entity_to_dto(self, entity: ListAudits) -> AuditDTO:
+        list_dto = AuditDTO(id=entity.id, code=str(entity.createdAt), name=str(entity.updatedAt))
         return list_dto
 
     def dto_to_entity(self, dto: list[AuditDTO]) -> list[ListAudits]:

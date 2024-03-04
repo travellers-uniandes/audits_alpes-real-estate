@@ -12,13 +12,13 @@ class GetAudits(Query):
 
 
 class GetAuditsHandler(ReservaQueryBaseHandler):
-    def handle(self, query: GetAudits) -> QueryResultado:
+    def handle(self, _query: GetAudits) -> QueryResultado:
         repositorio = self._repository_factory.create_object(AuditRepository.__class__)
-        audit = self._audit_factories.create_object(repositorio.get_all(), MapperAudit())
-        return QueryResultado(resultado=audit)
+        audits = self._audit_factories.create_object(repositorio.get_all(), MapperAudit())
+        return QueryResultado(resultado=audits)
 
 
 @query.register(GetAudits)
-def execute_query_get_list(query: GetAudits):
+def execute__query_get_list(_query: GetAudits):
     handler = GetAuditsHandler()
-    return handler.handle(query)
+    return handler.handle(_query)

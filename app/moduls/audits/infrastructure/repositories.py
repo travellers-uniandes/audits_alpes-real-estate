@@ -16,12 +16,12 @@ class AuditRepositoryPostgres(AuditRepository):
         return self._audits_factory
 
     def get_by_id(self, entity_id: int) -> ListAudits:
-        list_estate_dto = db.session.query(AuditDTO).filter_by(id=str(entity_id)).one()
+        audit_dto = db.session.query(AuditDTO).filter_by(id=entity_id).one()
         try:
-            estate_list_entity = self.estates_factory.create_object(list_estate_dto, MapperAudit())
+            audit_entity = self.estates_factory.create_object(audit_dto, MapperAudit())
+            return audit_entity
         except Exception as e:
             print("Error: ", e)
-        return estate_list_entity
 
     def get_all(self) -> list[AuditDTO]:
         audit_dtos = db.session.query(AuditDTO).all()
