@@ -2,61 +2,34 @@ from app.config.db import db
 from .dto import List_estates as List_estatesDTO, Audit
 from ..domain.entities import List_estates
 from ..domain.repositories import ListRepository
-from ..domain.factories import ListFactory
+from ..domain.factories import AuditFactory
 from ..infrastructure.mappers import MapeadorEstate
 
 
-class EstateRepositoryPostgres(ListRepository):
+class AuditRepositoryPostgres(ListRepository):
 
     def __init__(self):
-        self._estates_factory: ListFactory = ListFactory()
+        self._audits_factory: AuditFactory = AuditFactory()
 
     @property
     def estates_factory(self):
-        return self._estates_factory
+        return self._audits_factory
 
     def get_by_id(self, entity_id: int) -> List_estates:
-        # TODO
         list_estate_dto = db.session.query(List_estatesDTO).filter_by(id=str(entity_id)).one()
-        try:    
-            estate_list_entity = self.estates_factory.create_object(list_estate_dto, MapeadorEstate())             
+        try:
+            estate_list_entity = self.estates_factory.create_object(list_estate_dto, MapeadorEstate())
         except Exception as e:
             print("Error: ", e)
         return estate_list_entity
 
-
-
-
-
-
-
-    def get_all(self) -> list[List_estates]:
-        list_estate_dto = db.session.query(List_estatesDTO).all()
-        try:
-            estate_list_entity = self.estates_factory.create_object(list_estate_dto, MapeadorEstate())
-            return estate_list_entity
-        except Exception as e:
-            print("Error: ", e)
-
-
-
     def get_all(self) -> list[Audit]:
-        audits_dto = db.session.query(Audit).all()
+        audit_dtos = db.session.query(Audit).all()
         try:
-            audits_entity = self.estates_factory.create_object(audits_dto, MapeadorEstate())
-            return audits_entity
+            audit_entities = self.estates_factory.create_object(audit_dtos, MapeadorEstate())
+            return audit_entities
         except Exception as e:
             print("Error: ", e)
-
-
-
-
-
-
-
-
-
-
 
     def create(self, entity: List_estates):
         listesates_dto = self.estates_factory.create_object(entity, MapeadorEstate())

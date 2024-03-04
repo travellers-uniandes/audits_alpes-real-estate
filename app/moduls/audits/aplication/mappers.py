@@ -1,6 +1,7 @@
+from datetime import datetime
 from app.seedwork.aplication.dto import Mapper as AppMap
 from app.seedwork.domain.repositories import Mapper as RepMap
-from app.moduls.audits.domain.entities import Estate, List_estates
+from app.moduls.audits.domain.entities import Estate, List_estates, ListAudits, Audit
 from .dto import AuditDTO, ListDTO
 
 
@@ -19,7 +20,7 @@ class MapperAuditDTOJson(AppMap):
         return list_dto
 
     def dto_to_external(self, dto: ListDTO) -> dict:
-        return dto.__dict__
+        return dto
 
 
 class MapeadorEstate(RepMap):
@@ -29,23 +30,23 @@ class MapeadorEstate(RepMap):
         return Estate(code=estate_dto.code, name=estate_dto.name)
 
     def get_type(self) -> type:
-        return Estate.__class__
+        return Audit.__class__
 
     def entity_to_dto(self, list_entidad: List_estates) -> ListDTO:
         list_dto = ListDTO()
 
         estate_dto = AuditDTO(name=list_dto.estate.name, code=list_dto.estate.code)
-        # list_dto.estate = estate_dto
 
         return list_dto
 
-    def dto_to_entity(self, dto: ListDTO) -> List_estates:
-        list_estates = List_estates()
-        list_estates.estates = list()
+    def dto_to_entity(self, dto: list[AuditDTO]) -> list[ListAudits]:
+        audits_entities: list = []
 
-        estates_dto: list[AuditDTO] = dto.estates
+        for audit in dto:
+            list_audit = ListAudits()
+            list_audit.id = audit.id
+            list_audit.createdAt = datetime.now()
+            list_audit.updatedAt = datetime.now()
+            audits_entities.append(list_audit)
 
-        for itin in estates_dto.estates:
-            list_estates.estates.append(self._procesar_estates(itin))
-
-        return list_estates
+        return audits_entities

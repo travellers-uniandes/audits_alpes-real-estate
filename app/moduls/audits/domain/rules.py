@@ -1,14 +1,8 @@
-"""Reglas de negocio del dominio de cliente
-
-En este archivo usted encontrará reglas de negocio del dominio de audits
-"""
-
 from app.seedwork.domain.rules import BusinessRule
 from .entities import Estate
 
 
 class EstateMinOne(BusinessRule):
-
     estates: list[Estate]
 
     def __init__(self, estates, mensaje='Al menos una propiedad debe estar en el listado'):

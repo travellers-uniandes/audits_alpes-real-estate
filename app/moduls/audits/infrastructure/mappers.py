@@ -34,20 +34,6 @@ class MapeadorEstate(RepMap):
 
         return list_dto
 
-    # def dto_to_entity(self, dto: List_estatesDTO) -> List_estates:
-    #     list_estates = List_estates()
-    #     if not dto:
-    #         return list_estates
-    #
-    #     list_estates.createdAt = datetime.now()
-    #     list_estates.updatedAt = datetime.now()
-    #
-    #     # estates_dto: list[EstateDTO] = dto.estates
-    #
-    #     # list_estates.estate.extend(self._procesar_estates_dto(estates_dto))
-    #
-    #     return list_estates
-
     def dto_to_entity(self, dto: list[AuditDTO]) -> list[ListAudits]:
         audits_entities: list = []
 
