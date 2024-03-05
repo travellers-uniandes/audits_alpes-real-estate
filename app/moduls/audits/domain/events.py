@@ -1,30 +1,35 @@
 from __future__ import annotations
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 import uuid
 from app.seedwork.domain.events import (DomainEvent)
 from datetime import datetime
 
-class EventoReserva(DomainEvent):
+
+class EventoAudit(DomainEvent):
     ...
 
+
 @dataclass
-class ReservaCreada(EventoReserva):
+class AuditCreated(EventoAudit):
     id_reserva: uuid.UUID = None
     id_cliente: uuid.UUID = None
     estado: str = None
     fecha_creacion: datetime = None
-    
+
+
 @dataclass
-class ReservaCancelada(EventoReserva):
+class AuditCanceled(EventoAudit):
     id_reserva: uuid.UUID = None
     fecha_actualizacion: datetime = None
 
+
 @dataclass
-class ReservaAprobada(EventoReserva):
+class AuditApproved(EventoAudit):
     id_reserva: uuid.UUID = None
     fecha_actualizacion: datetime = None
 
+
 @dataclass
-class ReservaPagada(EventoReserva):
+class AuditPaid(EventoAudit):
     id_reserva: uuid.UUID = None
     fecha_actualizacion: datetime = None

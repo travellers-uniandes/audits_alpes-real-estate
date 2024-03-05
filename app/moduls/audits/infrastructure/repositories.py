@@ -1,68 +1,41 @@
 from app.config.db import db
-from .dto import List_estates as List_estatesDTO, Audit
-from ..domain.entities import List_estates
-from ..domain.repositories import ListRepository
-from ..domain.factories import ListFactory
-from ..infrastructure.mappers import MapeadorEstate
+from .dto import Audit as AuditDTO
+from ..domain.entities import ListAudits
+from ..domain.repositories import AuditRepository
+from ..domain.factories import AuditFactory
+from ..infrastructure.mappers import MapperAudit
 
 
-class EstateRepositoryPostgres(ListRepository):
+class AuditRepositoryPostgres(AuditRepository):
 
     def __init__(self):
-        self._estates_factory: ListFactory = ListFactory()
+        self._audits_factory: AuditFactory = AuditFactory()
 
     @property
     def estates_factory(self):
-        return self._estates_factory
+        return self._audits_factory
 
-    def get_by_id(self, entity_id: int) -> List_estates:
-        # TODO
-        list_estate_dto = db.session.query(List_estatesDTO).filter_by(id=str(entity_id)).one()
-        try:    
-            estate_list_entity = self.estates_factory.create_object(list_estate_dto, MapeadorEstate())             
-        except Exception as e:
-            print("Error: ", e)
-        return estate_list_entity
-
-
-
-
-
-
-
-    def get_all(self) -> list[List_estates]:
-        list_estate_dto = db.session.query(List_estatesDTO).all()
+    def get_by_id(self, entity_id: int) -> ListAudits:
+        audit_dto = db.session.query(AuditDTO).filter_by(id=entity_id).one()
         try:
-            estate_list_entity = self.estates_factory.create_object(list_estate_dto, MapeadorEstate())
-            return estate_list_entity
+            audit_entity = self.estates_factory.create_object(audit_dto, MapperAudit())
+            return audit_entity
         except Exception as e:
             print("Error: ", e)
 
-
-
-    def get_all(self) -> list[Audit]:
-        audits_dto = db.session.query(Audit).all()
+    def get_all(self) -> list[AuditDTO]:
+        audit_dtos = db.session.query(AuditDTO).all()
         try:
-            audits_entity = self.estates_factory.create_object(audits_dto, MapeadorEstate())
-            return audits_entity
+            audit_entities = self.estates_factory.create_object(audit_dtos, MapperAudit())
+            return audit_entities
         except Exception as e:
             print("Error: ", e)
 
-
-
-
-
-
-
-
-
-
-
-    def create(self, entity: List_estates):
-        listesates_dto = self.estates_factory.create_object(entity, MapeadorEstate())
+    def create(self, entity: ListAudits):
+        listesates_dto = self.estates_factory.create_object(entity, MapperAudit())
         db.session.add(listesates_dto)
 
-    def update(self, entity_id: int, entity: List_estates):
+    def update(self, entity_id: int, entity: ListAudits):
         raise NotImplementedError
 
     def delete(self, entity_id: int):

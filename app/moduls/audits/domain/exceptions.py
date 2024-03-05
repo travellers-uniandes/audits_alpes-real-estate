@@ -1,8 +1,3 @@
-""" Excepciones del dominio de vuelos
-
-En este archivo usted encontrará los Excepciones relacionadas al dominio de audits
-"""
-
 from app.seedwork.domain.exceptions import FactoryException
 
 

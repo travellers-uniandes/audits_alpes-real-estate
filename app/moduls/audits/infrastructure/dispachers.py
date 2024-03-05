@@ -20,7 +20,6 @@ class Despachador:
         cliente.close()
 
     def publicar_evento(self, evento, topico):
-        # TODO Debe existir un forma de crear el Payload en Avro con base al tipo del evento
         payload = ReservaCreadaPayload(
             id_reserva=str(evento.id_reserva),
             id_cliente=str(evento.id_cliente),
@@ -31,7 +30,6 @@ class Despachador:
         self._publicar_mensaje(evento_integracion, topico, AvroSchema(EventoReservaCreada))
 
     def publicar_comando(self, comando, topico):
-        # TODO Debe existir un forma de crear el Payload en Avro con base al tipo del comando
         payload = ComandoCrearReservaPayload(
             id_usuario=str(comando.id_usuario)
         )

@@ -1,8 +1,8 @@
 from pulsar import ConsumerType, Client
 
 pulsar_url = "pulsar://localhost:6650"
-topic_name = "persistent://public/default/eventos-reserva"
-subscription_name = "aeroalpes-sub-eventos"
+topic_name = "persistent://public/default/audit-events"
+subscription_name = "audit-sub-events"
 
 client = Client(pulsar_url)
 consumer = client.subscribe(

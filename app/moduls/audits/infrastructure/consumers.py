@@ -8,44 +8,44 @@ from app.seedwork.infrastructure import utils
 
 
 def suscribirse_a_eventos():
-    cliente = None
+    client = None
     try:
-        cliente = pulsar.Client(f'pulsar://{utils.broker_host()}:6650')
-        consumidor = cliente.subscribe('eventos-reserva', consumer_type=_pulsar.ConsumerType.Shared,
-                                       subscription_name='aeroalpes-sub-eventos',
-                                       schema=AvroSchema(EventoReservaCreada))
+        client = pulsar.Client(f'pulsar://{utils.broker_host()}:6650')
+        consumer = client.subscribe('audit-events', consumer_type=_pulsar.ConsumerType.Shared,
+                                    subscription_name='audit-sub-events',
+                                    schema=AvroSchema(EventoReservaCreada))
 
         while True:
-            mensaje = consumidor.receive()
+            mensaje = consumer.receive()
             print(f'Evento recibido: {mensaje.value().data}')
 
-            consumidor.acknowledge(mensaje)
+            consumer.acknowledge(mensaje)
 
-        cliente.close()
+        client.close()
     except:
         logging.error('ERROR: Suscribiendose al tópico de eventos!')
         traceback.print_exc()
-        if cliente:
-            cliente.close()
+        if client:
+            client.close()
 
 
 def suscribirse_a_comandos():
-    cliente = None
+    client = None
     try:
-        cliente = pulsar.Client(f'pulsar://{utils.broker_host()}:6650')
-        consumidor = cliente.subscribe('comandos-reserva', consumer_type=_pulsar.ConsumerType.Shared,
-                                       subscription_name='aeroalpes-sub-comandos',
-                                       schema=AvroSchema(ComandoCrearReserva))
+        client = pulsar.Client(f'pulsar://{utils.broker_host()}:6650')
+        consumer = client.subscribe('audit-commands', consumer_type=_pulsar.ConsumerType.Shared,
+                                    subscription_name='audit-sub-commands',
+                                    schema=AvroSchema(ComandoCrearReserva))
 
         while True:
-            mensaje = consumidor.receive()
+            mensaje = consumer.receive()
             print(f'Comando recibido: {mensaje.value().data}')
 
-            consumidor.acknowledge(mensaje)
+            consumer.acknowledge(mensaje)
 
-        cliente.close()
+        client.close()
     except:
         logging.error('ERROR: Suscribiendose al tópico de comandos!')
         traceback.print_exc()
-        if cliente:
-            cliente.close()
+        if client:
+            client.close()
