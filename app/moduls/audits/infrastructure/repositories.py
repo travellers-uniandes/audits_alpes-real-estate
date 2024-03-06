@@ -15,7 +15,7 @@ class AuditRepositoryPostgres(AuditRepository):
     def estates_factory(self):
         return self._audits_factory
 
-    def get_by_id(self, entity_id: int) -> ListAudits:
+    def get_by_id(self, entity_id: str) -> ListAudits:
         audit_dto = db.session.query(AuditDTO).filter_by(id=entity_id).one()
         try:
             audit_entity = self.estates_factory.create_object(audit_dto, MapperAudit())
@@ -32,8 +32,8 @@ class AuditRepositoryPostgres(AuditRepository):
             print("Error: ", e)
 
     def create(self, entity: ListAudits):
-        listesates_dto = self.estates_factory.create_object(entity, MapperAudit())
-        db.session.add(listesates_dto)
+        audit_dto = self.estates_factory.create_object(entity, MapperAudit())
+        db.session.add(audit_dto)
 
     def update(self, entity_id: int, entity: ListAudits):
         raise NotImplementedError

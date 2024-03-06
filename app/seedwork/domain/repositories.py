@@ -4,7 +4,7 @@ from .entities import Entity
 
 class Repository(ABC):
     @abstractmethod
-    def get_by_id(self, entity_id: int) -> Entity:
+    def get_by_id(self, entity_id: str) -> Entity:
         ...
 
     @abstractmethod

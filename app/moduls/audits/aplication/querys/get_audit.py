@@ -8,7 +8,7 @@ from app.moduls.audits.aplication.mappers import MapperAudit
 
 @dataclass
 class GetAudit(Query):
-    id: int
+    id: str
 
 
 class GetAuditsHandler(ReservaQueryBaseHandler):

@@ -15,3 +15,6 @@ class CreateAuditBaseHandler(QueryHandler):
     @property
     def audit_factories(self):
         return self._audit_factories
+
+    def handle(self, _command):
+        ...

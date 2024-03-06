@@ -11,14 +11,14 @@ from ...domain.entities import ListAudits
 
 @dataclass
 class CreateAudit(Command):
-    estates: AuditDTO
+    audits: AuditDTO
 
 
 class CreateAuditHandler(CreateAuditBaseHandler):
     def handle(self, _command: CreateAudit):
-        estates = _command
+        audits = _command
 
-        audit: ListAudits = self.audit_factories.create_object(estates, MapperAudit())
+        audit: ListAudits = self.audit_factories.create_object(audits, MapperAudit())
         audit.create_audit(audit)
         repository = self.repository_factory.create_object(AuditRepository.__class__)
 
