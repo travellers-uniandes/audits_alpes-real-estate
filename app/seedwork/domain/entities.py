@@ -7,7 +7,7 @@ from app.seedwork.domain.events import DomainEvent
 
 @dataclass
 class Entity:
-    id: str = field(default=uuid.UUID)
+    id: uuid.UUID = field(default=None)
     created_at: datetime = field(default=datetime.now())
     updated_at: datetime = field(default=datetime.now())
         

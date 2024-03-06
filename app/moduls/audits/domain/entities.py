@@ -1,4 +1,5 @@
 from __future__ import annotations
+import uuid
 from dataclasses import dataclass, field
 from datetime import datetime
 from app.moduls.audits.domain.events import AuditCreated
@@ -12,10 +13,11 @@ class Audit(Entity):
 
 @dataclass
 class ListAudits(RootAggregation):
-    location_id: str = field(default=str)
+    id: uuid.UUID = field(default=str)
+    location_id: uuid.UUID = field(default=str)
     code: str = field(default=str)
     score: float = field(default=float)
     approved_audit: bool = field(default=bool)
 
     def create_audit(self, audit: ListAudits):
-        self.add_events(AuditCreated(id_audit=audit, created_at=datetime.now()))
+        self.add_events(AuditCreated(id=audit.id, id_audit=audit.id, created_at=datetime.now()))

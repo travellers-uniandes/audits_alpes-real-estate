@@ -29,8 +29,14 @@ class MapperAudit(RepMap):
         return Audit.__class__
 
     def entity_to_dto(self, entity: ListAudits) -> AuditDTO:
-        list_dto = AuditDTO(id=entity.id, code=str(entity.createdAt), name=str(entity.updatedAt))
-        return list_dto
+        audit_dto = AuditDTO(
+            id=entity.id,
+            location_id=entity.location_id,
+            code=entity.code,
+            score=entity.score,
+            approved_audit=entity.approved_audit,
+        )
+        return audit_dto
 
     def dto_to_entity(self, dto: Union[list[AuditDTO], dict]) -> Union[list[ListAudits], ListAudits]:
         audits_entities: list = []
@@ -38,6 +44,7 @@ class MapperAudit(RepMap):
         if isinstance(dto, list):
             for audit in dto:
                 audit_entity = ListAudits()
+                audit_entity.id = audit.id
                 audit_entity.approved_audit = audit.approved_audit
                 audit_entity.code = audit.code
                 audit_entity.location_id = audit.location_id
@@ -47,6 +54,7 @@ class MapperAudit(RepMap):
         else:
             audit = dto.audits
             audit_entity = ListAudits()
+            audit_entity.id = audit.id
             audit_entity.approved_audit = audit.approved_audit
             audit_entity.code = audit.code
             audit_entity.location_id = audit.location_id

@@ -17,7 +17,7 @@ class Location(Base):
 
 class Audit(Base):
     __tablename__ = "audits"
-    id = db.Column(db.String, primary_key=True)
+    id = db.Column(db.String, primary_key=True, index=True)
     location_id = db.Column(db.String, db.ForeignKey("locations.id"))
     code = db.Column(db.String)
     score = db.Column(db.Float)

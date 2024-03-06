@@ -20,8 +20,8 @@ def get_audits():
     return map_audits.dto_to_external(query_resultado.resultado)
 
 
-@bp.route("/<int:audit_id>", methods=('GET',))
-def get_audit(audit_id: int):
+@bp.route("/<audit_id>", methods=('GET',))
+def get_audit(audit_id: str):
     query_resultado = execute_query(GetAudit(audit_id))
     map_audit = MapApp()
     return map_audit.dto_to_external(query_resultado.resultado)
