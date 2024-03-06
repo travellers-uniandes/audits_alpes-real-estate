@@ -8,8 +8,13 @@ from .dto import AuditDTO
 
 class MapperAuditDTOJson(AppMap):
     def external_to_dto(self, externo: dict) -> AuditDTO:
-        list_dto = AuditDTO()
-        return list_dto
+        audit_dto = AuditDTO(
+            location_id=externo.get('location_id'),
+            code=externo.get('code'),
+            score=externo.get('score'),
+            approved_audit=externo.get('approved_audit')
+        )
+        return audit_dto
 
     def dto_to_external(self, dto: AuditDTO) -> Union[dict, AuditDTO]:
         if isinstance(dto, AuditDTO):
@@ -27,14 +32,23 @@ class MapperAudit(RepMap):
         list_dto = AuditDTO(id=entity.id, code=str(entity.createdAt), name=str(entity.updatedAt))
         return list_dto
 
-    def dto_to_entity(self, dto: list[AuditDTO]) -> list[ListAudits]:
+    def dto_to_entity(self, dto: Union[list[AuditDTO], dict]) -> Union[list[ListAudits], ListAudits]:
         audits_entities: list = []
 
-        for audit in dto:
-            list_audit = ListAudits()
-            list_audit.id = audit.id
-            list_audit.createdAt = datetime.now()
-            list_audit.updatedAt = datetime.now()
-            audits_entities.append(list_audit)
-
-        return audits_entities
+        if isinstance(dto, list):
+            for audit in dto:
+                audit_entity = ListAudits()
+                audit_entity.approved_audit = audit.approved_audit
+                audit_entity.code = audit.code
+                audit_entity.location_id = audit.location_id
+                audit_entity.score = audit.score
+                audits_entities.append(audit_entity)
+            return audits_entities
+        else:
+            audit = dto.audits
+            audit_entity = ListAudits()
+            audit_entity.approved_audit = audit.approved_audit
+            audit_entity.code = audit.code
+            audit_entity.location_id = audit.location_id
+            audit_entity.score = audit.score
+            return audit_entity

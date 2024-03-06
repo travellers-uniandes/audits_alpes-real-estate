@@ -27,7 +27,7 @@ def get_audit(audit_id: int):
     return map_audit.dto_to_external(query_resultado.resultado)
 
 
-@bp.route("/command", methods=('POST',))
+@bp.route("/", methods=('POST',))
 def create_audit():
     try:
         audit_dict = request.json

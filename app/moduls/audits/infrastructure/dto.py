@@ -1,5 +1,4 @@
 from datetime import datetime
-
 from app.config.db import db
 
 Base = db.Model
@@ -7,7 +6,7 @@ Base = db.Model
 
 class Location(Base):
     __tablename__ = "locations"
-    id = db.Column(db.Integer, primary_key=True, index=True, autoincrement=True)
+    id = db.Column(db.String, primary_key=True, index=True)
     currency = db.Column(db.String)
     language = db.Column(db.String)
     name = db.Column(db.String)
@@ -18,8 +17,8 @@ class Location(Base):
 
 class Audit(Base):
     __tablename__ = "audits"
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    location_id = db.Column(db.Integer, db.ForeignKey("locations.id"))
+    id = db.Column(db.String, primary_key=True)
+    location_id = db.Column(db.String, db.ForeignKey("locations.id"))
     code = db.Column(db.String)
     score = db.Column(db.Float)
     approved_audit = db.Column(db.Boolean)

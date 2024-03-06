@@ -32,8 +32,14 @@ class AuditRepositoryPostgres(AuditRepository):
             print("Error: ", e)
 
     def create(self, entity: ListAudits):
-        listesates_dto = self.estates_factory.create_object(entity, MapperAudit())
-        db.session.add(listesates_dto)
+        audit_dto = self.estates_factory.create_object(entity, MapperAudit())
+        au = AuditDTO(
+            location_id=1,
+            code="1a",
+            score=90,
+            approved_audit=True
+        )
+        db.session.add(au)
 
     def update(self, entity_id: int, entity: ListAudits):
         raise NotImplementedError

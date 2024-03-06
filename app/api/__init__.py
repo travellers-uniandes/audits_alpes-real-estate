@@ -49,7 +49,7 @@ def create_app(configuracion={}):
 
     with app.app_context():
         db.create_all()
-        comenzar_consumidor()
+        # comenzar_consumidor()
 
     app.register_blueprint(audit_router.bp)
 
