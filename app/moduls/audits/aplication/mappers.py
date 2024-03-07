@@ -1,4 +1,3 @@
-from datetime import datetime
 from typing import Union
 from app.seedwork.aplication.dto import Mapper as AppMap
 from app.seedwork.domain.repositories import Mapper as RepMap
@@ -23,8 +22,6 @@ class MapperAuditDTOJson(AppMap):
 
 
 class MapperAudit(RepMap):
-    _FORMATO_FECHA = '%Y-%m-%dT%H:%M:%SZ'
-
     def get_type(self) -> type:
         return Audit.__class__
 
