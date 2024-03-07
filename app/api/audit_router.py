@@ -16,16 +16,22 @@ bp = apiflask.create_blueprint('audit_router', '/audits')
 
 @bp.route("/", methods=('GET',))
 def get_audits():
-    query_resultado = execute_query(GetAudits())
-    map_audits = MapApp()
-    return map_audits.dto_to_external(query_resultado.resultado)
+    try:
+        query_resultado = execute_query(GetAudits())
+        map_audits = MapApp()
+        return map_audits.dto_to_external(query_resultado.resultado)
+    except Exception as e:
+        return Response(json.dumps(dict(error=str(e))), status=400, mimetype='application/json')
 
 
 @bp.route("/<audit_id>", methods=('GET',))
 def get_audit(audit_id: str):
-    query_resultado = execute_query(GetAudit(audit_id))
-    map_audit = MapApp()
-    return map_audit.dto_to_external(query_resultado.resultado)
+    try:
+        query_resultado = execute_query(GetAudit(audit_id))
+        map_audit = MapApp()
+        return map_audit.dto_to_external(query_resultado.resultado)
+    except Exception as e:
+        return Response(json.dumps(dict(error=str(e))), status=400, mimetype='application/json')
 
 
 @bp.route("/", methods=('POST',))
