@@ -54,7 +54,6 @@ Dockerfile-stage
 README.md
 alembic.ini.example
 .pytest_cache
-.env
 .env.example
 config.py
 data/

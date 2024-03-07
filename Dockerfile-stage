@@ -5,6 +5,8 @@ WORKDIR /audit_alpes-real-estate
 COPY . .
 
 RUN pip install --no-cache-dir --upgrade -r requirements.txt
+RUN python -m pip install pulsar-client
+
 
 EXPOSE 8008
 

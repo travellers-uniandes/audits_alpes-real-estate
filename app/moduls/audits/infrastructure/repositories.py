@@ -32,11 +32,18 @@ class AuditRepositoryPostgres(AuditRepository):
             print("Error: ", e)
 
     def create(self, entity: ListAudits):
-        audit_dto = self.estates_factory.create_object(entity, MapperAudit())
-        db.session.add(audit_dto)
+        try:
+            audit_dto = self.estates_factory.create_object(entity, MapperAudit())
+            db.session.add(audit_dto)
+        except Exception as e:
+            print("Error: ", e)
 
     def update(self, entity_id: int, entity: ListAudits):
         raise NotImplementedError
 
     def delete(self, entity_id: int):
-        raise NotImplementedError
+        try:
+            audit_dto = db.session.query(AuditDTO).filter_by(id=entity_id).one()
+            db.session.delete(audit_dto)
+        except Exception as e:
+            print("Error: ", e)
