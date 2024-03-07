@@ -16,16 +16,24 @@ bp = apiflask.create_blueprint('audit_router', '/audits')
 
 @bp.route("/", methods=('GET',))
 def get_audits():
-    query_resultado = execute_query(GetAudits())
-    map_audits = MapApp()
-    return map_audits.dto_to_external(query_resultado.resultado)
+    try:
+        query_resultado = execute_query(GetAudits())
+        map_audits = MapApp()
+        return map_audits.dto_to_external(query_resultado.resultado)
+    except Exception as e:
+        return Response(json.dumps(dict(error=str(e))), status=400, mimetype='application/json')
 
 
 @bp.route("/<audit_id>", methods=('GET',))
 def get_audit(audit_id: str):
-    query_resultado = execute_query(GetAudit(audit_id))
-    map_audit = MapApp()
-    return map_audit.dto_to_external(query_resultado.resultado)
+    try:
+        query_resultado = execute_query(GetAudit(audit_id))
+        map_audit = MapApp()
+        return map_audit.dto_to_external(query_resultado.resultado)
+    except Exception as e:
+        if 'object has no attribute' in str(e):
+            return Response(json.dumps(dict(error='Audit not found')), status=404, mimetype='application/json')
+        return Response(json.dumps(dict(error=str(e))), status=400, mimetype='application/json')
 
 
 @bp.route("/", methods=('POST',))
@@ -34,7 +42,6 @@ def create_audit():
         audit_dict = request.json
         map_audit = MapApp()
         audit_dto = map_audit.external_to_dto(audit_dict)
-
         command = CreateAudit(audit_dto)
         execute_command(command)
         return Response('{}', status=201, mimetype='application/json')

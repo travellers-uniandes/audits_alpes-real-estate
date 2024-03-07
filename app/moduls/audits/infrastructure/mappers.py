@@ -3,20 +3,16 @@ from typing import Union
 from app.seedwork.domain.repositories import Mapper as RepMap
 from app.moduls.audits.domain.entities import ListAudits
 from .dto import Audit as AuditDTO, Audit
-from datetime import datetime
 
 
 class MapperAudit(RepMap):
-    _FORMATO_FECHA = '%Y-%m-%dT%H:%M:%SZ'
-
     def get_type(self) -> type:
         return ListAudits.__class__
 
     def entity_to_dto(self, entity: ListAudits) -> AuditDTO:
         audit_dto = AuditDTO()
-        #todo validate if the id is a uuid
         audit_dto.id = str(uuid.uuid4())
-        audit_dto.location_id = "0ca0f5f3-40fa-4aa4-8117-c9d670eb7ffa"
+        audit_dto.location_id = entity.location_id
         audit_dto.code = entity.code
         audit_dto.score = entity.score
         audit_dto.approved_audit = entity.approved_audit
