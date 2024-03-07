@@ -7,33 +7,32 @@ from ..infrastructure.mappers import MapperAudit
 
 
 class AuditRepositoryPostgres(AuditRepository):
-
     def __init__(self):
         self._audits_factory: AuditFactory = AuditFactory()
 
     @property
-    def estates_factory(self):
+    def audits_factory(self):
         return self._audits_factory
 
     def get_by_id(self, entity_id: str) -> ListAudits:
-        audit_dto = db.session.query(AuditDTO).filter_by(id=entity_id).one()
         try:
-            audit_entity = self.estates_factory.create_object(audit_dto, MapperAudit())
+            audit_dto = db.session.query(AuditDTO).filter_by(id=entity_id).one()
+            audit_entity = self.audits_factory.create_object(audit_dto, MapperAudit())
             return audit_entity
         except Exception as e:
             print("Error: ", e)
 
     def get_all(self) -> list[AuditDTO]:
-        audit_dtos = db.session.query(AuditDTO).all()
         try:
-            audit_entities = self.estates_factory.create_object(audit_dtos, MapperAudit())
+            audit_dtos = db.session.query(AuditDTO).all()
+            audit_entities = self.audits_factory.create_object(audit_dtos, MapperAudit())
             return audit_entities
         except Exception as e:
             print("Error: ", e)
 
     def create(self, entity: ListAudits):
         try:
-            audit_dto = self.estates_factory.create_object(entity, MapperAudit())
+            audit_dto = self.audits_factory.create_object(entity, MapperAudit())
             db.session.add(audit_dto)
         except Exception as e:
             print("Error: ", e)

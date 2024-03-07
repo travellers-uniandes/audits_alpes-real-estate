@@ -3,7 +3,7 @@ from app.moduls.audits.infrastructure.factories import RepositoryFactory
 from app.moduls.audits.domain.factories import AuditFactory
 
 
-class ReservaQueryBaseHandler(QueryHandler):
+class AuditQueryBaseHandler(QueryHandler):
     def __init__(self):
         self._repository_factory: RepositoryFactory = RepositoryFactory()
         self._audit_factories: AuditFactory = AuditFactory()

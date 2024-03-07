@@ -16,11 +16,11 @@ class Repository(ABC):
         ...
 
     @abstractmethod
-    def update(self, entity_id: int, entity: Entity):
+    def update(self, entity_id: str, entity: Entity):
         ...
 
     @abstractmethod
-    def delete(self, entity_id: int):
+    def delete(self, entity_id: str):
         ...
 
 
