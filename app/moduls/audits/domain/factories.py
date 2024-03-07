@@ -1,7 +1,7 @@
 from app.moduls.audits.domain.exceptions import ObjectTypeNotExistInEstatesDomainException
 from app.seedwork.domain.repositories import Mapper
 from app.seedwork.domain.entities import Entity
-from .entities import ListAudits, Audit
+from .entities import Audit
 from dataclasses import dataclass
 from app.seedwork.domain.factories import Factory
 
@@ -12,7 +12,7 @@ class _AuditFactory(Factory):
         if isinstance(obj, Entity):
             return mapper.entity_to_dto(obj)
         else:
-            audits: ListAudits = mapper.dto_to_entity(obj)
+            audits = mapper.dto_to_entity(obj)
             # This session is for validate the business rules
             # Example self.validate_rule(AuditMinOne(Audit.code))
             return audits
