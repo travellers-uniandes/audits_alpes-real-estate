@@ -1,6 +1,4 @@
-from sqlalchemy.exc import NoResultFound
 from app.config.db import db
-from flask import abort
 from .dto import Audit as AuditDTO
 from ..domain.entities import ListAudits
 from ..domain.repositories import AuditRepository
@@ -16,31 +14,35 @@ class AuditRepositoryPostgres(AuditRepository):
     def audits_factory(self):
         return self._audits_factory
 
-    @staticmethod
-    def validate_existence(entity_id: str) -> AuditDTO:
-        try:
-            audit = db.session.query(AuditDTO).filter_by(id=entity_id).one()
-            return audit
-        except NoResultFound:
-            abort(404, description="Audit not found")
-
     def get_by_id(self, entity_id: str) -> ListAudits:
-        audit_dto = self.validate_existence(entity_id)
-        audit_entity = self.audits_factory.create_object(audit_dto, MapperAudit())
-        return audit_entity
+        try:
+            audit_dto = db.session.query(AuditDTO).filter_by(id=entity_id).one()
+            audit_entity = self.audits_factory.create_object(audit_dto, MapperAudit())
+            return audit_entity
+        except Exception as e:
+            print("Error: ", e)
 
     def get_all(self) -> list[AuditDTO]:
-        audit_dtos = db.session.query(AuditDTO).all()
-        audit_entities = self.audits_factory.create_object(audit_dtos, MapperAudit())
-        return audit_entities
+        try:
+            audit_dtos = db.session.query(AuditDTO).all()
+            audit_entities = self.audits_factory.create_object(audit_dtos, MapperAudit())
+            return audit_entities
+        except Exception as e:
+            print("Error: ", e)
 
     def create(self, entity: ListAudits):
-        audit_dto = self.audits_factory.create_object(entity, MapperAudit())
-        db.session.add(audit_dto)
+        try:
+            audit_dto = self.audits_factory.create_object(entity, MapperAudit())
+            db.session.add(audit_dto)
+        except Exception as e:
+            print("Error: ", e)
 
-    def update(self, entity_id: str, entity: ListAudits):
+    def update(self, entity_id: int, entity: ListAudits):
         raise NotImplementedError
 
-    def delete(self, entity_id: str):
-        audit_dto = self.validate_existence(entity_id)
-        db.session.delete(audit_dto)
+    def delete(self, entity_id: int):
+        try:
+            audit_dto = db.session.query(AuditDTO).filter_by(id=entity_id).one()
+            db.session.delete(audit_dto)
+        except Exception as e:
+            print("Error: ", e)
