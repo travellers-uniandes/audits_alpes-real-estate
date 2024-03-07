@@ -23,13 +23,13 @@ services:
     container_name: postgresql
     restart: unless-stopped
     ports:
-      - "5433:5432"
+      - "5432:5432"
     volumes:
       - postgres-data:/var/lib/postgresql/data
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=6565
-      - POSTGRES_DB=estates_alpes_real_estate
+      - POSTGRES_DB=audit_alpes_real_estate
     networks:
       internal_net:
         aliases:
