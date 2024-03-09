@@ -19,4 +19,4 @@ class ListAudits(RootAggregation):
     approved_audit: bool = field(default=bool)
 
     def create_audit(self, audit: ListAudits):
-        self.add_events(CommandResponseCreateAuditJson(data=audit.id))
+        self.add_events(CommandResponseCreateAuditJson(data=str(audit.id)))
