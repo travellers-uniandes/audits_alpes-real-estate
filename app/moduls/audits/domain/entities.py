@@ -1,9 +1,8 @@
 from __future__ import annotations
 import uuid
 from dataclasses import dataclass, field
-from datetime import datetime
-from app.moduls.audits.domain.events import AuditCreated
 from app.seedwork.domain.entities import Entity, RootAggregation
+from app.seedwork.infrastructure.schema.v1.commands import CommandResponseCreateAuditJson
 
 
 @dataclass
@@ -20,4 +19,4 @@ class ListAudits(RootAggregation):
     approved_audit: bool = field(default=bool)
 
     def create_audit(self, audit: ListAudits):
-        self.add_events(AuditCreated(id=audit.id, id_audit=audit.id, created_at=datetime.now()))
+        self.add_events(CommandResponseCreateAuditJson(data=str(audit.id)))

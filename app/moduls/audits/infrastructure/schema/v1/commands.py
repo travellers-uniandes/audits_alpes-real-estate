@@ -1,11 +1,10 @@
 from pulsar.schema import *
-from app.seedwork.infrastructure.schema.v1.comandos import (ComandoIntegracion)
+from app.seedwork.infrastructure.schema.v1.commands import IntegrationCommand
 
 
-class ComandoCrearReservaPayload(ComandoIntegracion):
+class CreateCommandAuditPayload(IntegrationCommand):
     id_usuario = String()
-    # TODO Cree los records para itinerarios
 
 
-class ComandoCrearReserva(ComandoIntegracion):
-    data = ComandoCrearReservaPayload()
+class CreateCommandAudit(IntegrationCommand):
+    data = CreateCommandAuditPayload()
