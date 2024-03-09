@@ -1,13 +1,13 @@
 from pulsar.schema import *
-from app.seedwork.infrastructure.schema.v1.eventos import EventoIntegracion
+from app.seedwork.infrastructure.schema.v1.events import IntegrationEvent
 
 
-class ReservaCreadaPayload(Record):
+class AuditCreatedPayload(Record):
     id_reserva = String()
     id_cliente = String()
-    estado = String()
-    fecha_creacion = Long()
+    state = String()
+    created_at = Long()
 
 
-class EventoReservaCreada(EventoIntegracion):
-    data = ReservaCreadaPayload()
+class EventoAuditCreated(IntegrationEvent):
+    data = AuditCreatedPayload()

@@ -2,14 +2,13 @@ import json
 import uuid
 from flask import Flask
 from app.moduls.audits.infrastructure.dispachers import Despachador
-from app.moduls.audits.infrastructure.dto import Audit, Location
+from app.moduls.audits.infrastructure.dto import Audit
 from app.seedwork.infrastructure import utils
-import pulsar,_pulsar  
-from pulsar.schema import *
+import pulsar
 from app.config.db import init_db
-from app.seedwork.infrastructure.schema.v1.comandos import CommandResponseCreateAuditJson, CommandResponseRollbackCreateAuditJson
+from app.seedwork.infrastructure.schema.v1.commands import CommandResponseCreateAuditJson, \
+    CommandResponseRollbackCreateAuditJson
 from config import Setting
-#from app.moduls.audits.infrastructure.dto
 
 app = Flask(__name__, instance_relative_config=True)
 app.config['SQLALCHEMY_DATABASE_URI'] = Setting.DATABASE_URL
@@ -17,7 +16,9 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.secret_key = '9d58f98f-3ae8-4149-a09f-3a8c2012e32c'
 app.config['SESSION_TYPE'] = 'filesystem'
 init_db(app)
-from app.config.db import db    
+from app.config.db import db
+
+
 def suscribirse_a_comandos():
     client = None
     try:
@@ -43,8 +44,8 @@ def suscribirse_a_comandos():
 
                 despachador = Despachador()
                 command = CommandResponseCreateAuditJson()
-                
-                command.data = entity_id_json               
+
+                command.data = entity_id_json
                 despachador.publicar_comando(command, 'response-create-audit')
 
             consumer.acknowledge(mensaje)
@@ -80,8 +81,8 @@ def suscribirse_a_comandos_delete():
 
                 despachador = Despachador()
                 command = CommandResponseRollbackCreateAuditJson()
-                
-                command.data = id_value               
+
+                command.data = id_value
                 despachador.publicar_comando(command, 'response-rollback-create-audit')
 
             consumer.acknowledge(mensaje)

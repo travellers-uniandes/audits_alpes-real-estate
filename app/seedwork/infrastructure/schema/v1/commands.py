@@ -1,10 +1,14 @@
-from .mensajes import Mensaje
+from .messages import Message
 from pulsar.schema import *
 
-class ComandoIntegracion(Mensaje):
+
+class IntegrationCommand(Message):
     ...
+
+
 class CommandResponseCreateAuditJson(Record):
     data = String()
+
 
 class CommandResponseRollbackCreateAuditJson(Record):
     data = String()

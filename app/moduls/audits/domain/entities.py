@@ -1,10 +1,8 @@
 from __future__ import annotations
 import uuid
 from dataclasses import dataclass, field
-from datetime import datetime
-from app.moduls.audits.domain.events import AuditCreated
 from app.seedwork.domain.entities import Entity, RootAggregation
-from app.seedwork.infrastructure.schema.v1.comandos import CommandResponseCreateAuditJson
+from app.seedwork.infrastructure.schema.v1.commands import CommandResponseCreateAuditJson
 
 
 @dataclass

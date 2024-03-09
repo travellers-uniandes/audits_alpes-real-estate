@@ -10,18 +10,17 @@ def registrar_handlers():
 
 
 def importar_modelos_alchemy():
-    import app.moduls.audits.infrastructure.dto
+    ...
 
 
 def comenzar_consumidor():
-
     import app.moduls.audits.infrastructure.consumers as list_consumer
     import threading
-
 
     # Suscripción a comandos
     threading.Thread(target=list_consumer.suscribirse_a_comandos).start()
     threading.Thread(target=list_consumer.suscribirse_a_comandos_delete).start()
+
 
 def create_app(configuracion={}):
     app = Flask(__name__, instance_relative_config=True)
