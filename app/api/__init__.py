@@ -10,24 +10,18 @@ def registrar_handlers():
 
 
 def importar_modelos_alchemy():
-    ...
+    import app.moduls.audits.infrastructure.dto
 
 
 def comenzar_consumidor():
-    """
-    Este es un código de ejemplo. Aunque esto sea funcional puede ser un poco peligroso tener 
-    threads corriendo por si solos. Mi sugerencia es en estos casos usar un verdadero manejador
-    de procesos y threads como Celery.
-    """
+
     import app.moduls.audits.infrastructure.consumers as list_consumer
     import threading
 
-    # Suscripción a eventos
-    threading.Thread(target=list_consumer.suscribirse_a_eventos).start()
 
     # Suscripción a comandos
     threading.Thread(target=list_consumer.suscribirse_a_comandos).start()
-
+    threading.Thread(target=list_consumer.suscribirse_a_comandos_delete).start()
 
 def create_app(configuracion={}):
     app = Flask(__name__, instance_relative_config=True)
