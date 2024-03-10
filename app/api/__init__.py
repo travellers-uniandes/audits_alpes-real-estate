@@ -5,44 +5,40 @@ from config import settings
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 
-def registrar_handlers():
-    ...
+def register_handlers():
+    import app.modules.audits.aplication
 
 
-def importar_modelos_alchemy():
-    ...
+def import_models_alchemy():
+    import app.modules.audits.infrastructure.dto
 
 
-def comenzar_consumidor():
-    import app.moduls.audits.infrastructure.consumers as list_consumer
+def start_consumer(app):
+    import app.modules.audits.infrastructure.consumers as list_consumer
     import threading
 
     # Suscripción a comandos
-    threading.Thread(target=list_consumer.suscribirse_a_comandos).start()
-    threading.Thread(target=list_consumer.suscribirse_a_comandos_delete).start()
+    threading.Thread(target=list_consumer.suscribe_create_command, args=[app]).start()
+    threading.Thread(target=list_consumer.suscribe_delete_command, args=[app]).start()
 
 
-def create_app(configuracion={}):
+def create_app():
     app = Flask(__name__, instance_relative_config=True)
-
     app.config['SQLALCHEMY_DATABASE_URI'] = settings.DATABASE_URL
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
     app.secret_key = '9d58f98f-3ae8-4149-a09f-3a8c2012e32c'
     app.config['SESSION_TYPE'] = 'filesystem'
-    app.config['TESTING'] = configuracion.get('TESTING')
 
-    from app.config.db import init_db
+    from app.config.db import init_db, db
     init_db(app)
 
-    from app.config.db import db
     from . import audit_router
-    importar_modelos_alchemy()
-    registrar_handlers()
+    import_models_alchemy()
+    register_handlers()
 
     with app.app_context():
         db.create_all()
-        comenzar_consumidor()
+        start_consumer(app)
 
     app.register_blueprint(audit_router.bp)
 
