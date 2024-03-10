@@ -1,3 +1,4 @@
+import logging
 from app.modules.audits.aplication.commands.delete_audit import DeleteAudit
 from app.modules.audits.aplication.mappers import MapperAuditDTOJson as MapApp
 from app.modules.audits.aplication.commands.create_audit import CreateAudit
@@ -8,7 +9,11 @@ import pulsar
 from app.seedwork.infrastructure.schema.v1.commands import CommandResponseRollbackCreateAuditJson
 
 
-def suscribe_create_command():
+def suscribe_create_command(app=None):
+    if not app:
+        logging.error('ERROR: Contexto del app no puede ser nulo')
+        return
+
     client = None
     try:
         client = pulsar.Client(f'pulsar://{utils.broker_host()}:6650')
@@ -19,22 +24,23 @@ def suscribe_create_command():
             message = consumer.receive()
             print("Mensaje recibido: {}".format(message.data().decode('utf-8')))
 
-            audit_dict = {
-                "location_id": "0ca0f5f3-40fa-4aa4-8117-c9d670eb7ffa",
-                "code": "1a",
-                "score": 90,
-                "approved_audit": True
-            }
-            map_audit = MapApp()
-            audit_dto = map_audit.external_to_dto(audit_dict)
-            command = CreateAudit(audit_dto)
-            execute_command(command)
+            with app.app_context():
+                audit_dict = {
+                    "location_id": "0ca0f5f3-40fa-4aa4-8117-c9d670eb7ffa",
+                    "code": "1a",
+                    "score": 90,
+                    "approved_audit": True
+                }
+                map_audit = MapApp()
+                audit_dto = map_audit.external_to_dto(audit_dict)
+                command = CreateAudit(audit_dto)
+                execute_command(command)
 
-            # despachador = Despachador()
-            # command = CommandResponseCreateAuditJson()
-            #
-            # command.data = entity_id_json
-            # despachador.publicar_comando(command, 'response-create-audit')
+                # despachador = Despachador()
+                # command = CommandResponseCreateAuditJson()
+                #
+                # command.data = entity_id_json
+                # despachador.publicar_comando(command, 'response-create-audit')
 
             consumer.acknowledge(message)
 
@@ -47,7 +53,7 @@ def suscribe_create_command():
             client.close()
 
 
-def suscribe_delete_command():
+def suscribe_delete_command(app=None):
     client = None
     try:
         client = pulsar.Client(f'pulsar://{utils.broker_host()}:6650')
