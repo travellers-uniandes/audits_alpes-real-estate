@@ -8,7 +8,7 @@ import pulsar
 from app.seedwork.infrastructure.schema.v1.commands import CommandResponseRollbackCreateAuditJson
 
 
-def suscribe_create_command():
+def suscribe_create_command(app=None):
     client = None
     try:
         client = pulsar.Client(f'pulsar://{utils.broker_host()}:6650')
@@ -47,7 +47,7 @@ def suscribe_create_command():
             client.close()
 
 
-def suscribe_delete_command():
+def suscribe_delete_command(app=None):
     client = None
     try:
         client = pulsar.Client(f'pulsar://{utils.broker_host()}:6650')
