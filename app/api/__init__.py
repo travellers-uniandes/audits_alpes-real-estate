@@ -13,13 +13,13 @@ def import_models_alchemy():
     import app.modules.audits.infrastructure.dto
 
 
-def start_consumer(app):
-    import app.modules.audits.infrastructure.consumers as list_consumer
+def start_consumers(app):
+    import app.modules.audits.infrastructure.consumers as consumers
     import threading
 
-    # Suscripción a comandos
-    threading.Thread(target=list_consumer.suscribe_create_command, args=[app]).start()
-    threading.Thread(target=list_consumer.suscribe_delete_command, args=[app]).start()
+    # Subscription to commands
+    threading.Thread(target=consumers.suscribe_create_command, args=[app]).start()
+    threading.Thread(target=consumers.suscribe_delete_command, args=[app]).start()
 
 
 def create_app():
@@ -38,7 +38,7 @@ def create_app():
 
     with app.app_context():
         db.create_all()
-        start_consumer(app)
+        start_consumers(app)
 
     app.register_blueprint(audit_router.bp)
 
