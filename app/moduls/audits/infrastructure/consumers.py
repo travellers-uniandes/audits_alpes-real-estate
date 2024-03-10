@@ -34,9 +34,10 @@ def suscribirse_a_comandos():
                 print(f"Current app name: {app.name}")
                 entity = Audit()
                 entity.id = str(uuid.uuid4())
-                entity.location_id = 1
-                entity.code = "name"
-                entity.score = 1
+                entity.location_id = "0ca0f5f3-40fa-4aa4-8117-c9d670eb7ffa"
+                entity.code = "z10"
+                entity.score = 90
+                entity.approved_audit = True
                 entity_id_json = json.dumps({"id": entity.id})
                 db.session.add(entity)
                 db.session.commit()
