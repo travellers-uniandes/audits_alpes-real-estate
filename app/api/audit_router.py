@@ -2,11 +2,11 @@ import app.seedwork.presentation.apiflask as apiflask
 import json
 from flask import request
 from flask import Response
-from app.moduls.audits.aplication.querys.get_audit import GetAudit
-from app.moduls.audits.aplication.querys.get_audits import GetAudits
-from app.moduls.audits.aplication.mappers import MapperAuditDTOJson as MapApp
-from app.moduls.audits.aplication.commands.create_audit import CreateAudit
-from app.moduls.audits.aplication.commands.delete_audit import DeleteAudit
+from app.modules.audits.aplication.querys.get_audit import GetAudit
+from app.modules.audits.aplication.querys.get_audits import GetAudits
+from app.modules.audits.aplication.mappers import MapperAuditDTOJson as MapApp
+from app.modules.audits.aplication.commands.create_audit import CreateAudit
+from app.modules.audits.aplication.commands.delete_audit import DeleteAudit
 from app.seedwork.domain.exceptions import DomainException
 from app.seedwork.aplication.commands import execute_command
 from app.seedwork.aplication.queries import execute_query

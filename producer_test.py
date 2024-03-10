@@ -1,7 +1,7 @@
 from pulsar import Client
 
 pulsar_url = "pulsar://localhost:6650"
-topic_name = "persistent://public/default/audit-events"
+topic_name = "persistent://public/default/create-audit"
 
 client = Client(pulsar_url)
 producer = client.create_producer(topic_name)

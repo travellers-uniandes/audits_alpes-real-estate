@@ -1,7 +1,7 @@
 from typing import Union
 from app.seedwork.aplication.dto import Mapper as AppMap
 from app.seedwork.domain.repositories import Mapper as RepMap
-from app.moduls.audits.domain.entities import ListAudits, Audit
+from app.modules.audits.domain.entities import ListAudits, Audit
 from .dto import AuditDTO
 
 

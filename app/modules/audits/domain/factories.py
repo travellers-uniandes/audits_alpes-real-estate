@@ -1,4 +1,4 @@
-from app.moduls.audits.domain.exceptions import ObjectTypeNotExistInEstatesDomainException
+from app.modules.audits.domain.exceptions import ObjectTypeNotExistInEstatesDomainException
 from app.seedwork.domain.repositories import Mapper
 from app.seedwork.domain.entities import Entity
 from .entities import Audit
