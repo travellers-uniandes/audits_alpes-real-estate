@@ -4,8 +4,6 @@ from pulsar.schema import *
 from app.seedwork.infrastructure import utils
 import datetime
 
-from app.seedwork.infrastructure.schema.v1.comandos import CommandResponseCreateAuditJson, CommandResponseRollbackCreateAuditJson
-
 epoch = datetime.datetime.utcfromtimestamp(0)
 
 

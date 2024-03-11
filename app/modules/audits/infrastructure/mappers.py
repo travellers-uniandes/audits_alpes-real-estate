@@ -1,7 +1,7 @@
 import uuid
 from typing import Union
 from app.seedwork.domain.repositories import Mapper as RepMap
-from app.moduls.audits.domain.entities import ListAudits
+from app.modules.audits.domain.entities import ListAudits
 from .dto import Audit as AuditDTO, Audit
 
 

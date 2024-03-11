@@ -1,9 +1,9 @@
 from app.seedwork.aplication.queries import Query, QueryResultado
 from app.seedwork.aplication.queries import execute_query as query
-from app.moduls.audits.infrastructure.repositories import AuditRepository
+from app.modules.audits.infrastructure.repositories import AuditRepository
 from dataclasses import dataclass
 from .base import AuditQueryBaseHandler
-from app.moduls.audits.aplication.mappers import MapperAudit
+from app.modules.audits.aplication.mappers import MapperAudit
 
 
 @dataclass

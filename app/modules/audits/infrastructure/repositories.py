@@ -42,7 +42,11 @@ class AuditRepositoryPostgres(AuditRepository):
 
     def delete(self, entity_id: int):
         try:
-            audit_dto = db.session.query(AuditDTO).filter_by(id=entity_id).one()
+            audit_dto = None
+            if(entity_id.id == -1):
+                audit_dto = db.session.query(AuditDTO).order_by(AuditDTO.id.desc()).first()
+            else:
+                audit_dto = db.session.query(AuditDTO).filter_by(id=entity_id).one()
             db.session.delete(audit_dto)
         except Exception as e:
             print("Error: ", e)

@@ -3,7 +3,7 @@ from .base import CreateAuditBaseHandler
 from dataclasses import dataclass
 from app.seedwork.aplication.commands import execute_command as command
 from app.seedwork.infrastructure.uow import UnitOfWorkPort
-from app.moduls.audits.infrastructure.repositories import AuditRepository
+from app.modules.audits.infrastructure.repositories import AuditRepository
 
 
 @dataclass

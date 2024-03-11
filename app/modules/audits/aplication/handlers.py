@@ -1,5 +1,5 @@
 from app.seedwork.aplication.handlers import Handler
-from app.moduls.audits.infrastructure.dispachers import Despachador
+from app.modules.audits.infrastructure.dispachers import Despachador
 
 
 class HandlerAuditIntegration(Handler):
