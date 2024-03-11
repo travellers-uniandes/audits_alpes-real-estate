@@ -22,26 +22,25 @@ def suscribe_create_command(app):
             print("Mensaje recibido: {}".format(message.data().decode('utf-8')))
 
             with app.test_request_context():
-                audit_dict = {
-                    "location_id": "5a9d0736-11b6-4854-98e4-a297027cfdd9",
-                    "code": "1a",
-                    "score": 90,
-                    "approved_audit": True
-                }
+                audit_dict = get_info()
                 map_audit = MapApp()
                 audit_dto = map_audit.external_to_dto(audit_dict)
-                error = False
-                if error:
-                    command = CreateAudit(audit_dto)
-                    execute_command(command)
-                    command.data = -1
+                error = True
+                if error:                    
+                    
+                    despachador = Despachador()
+                    command = CommandResponseRollbackCreateAuditJson()
+                    command.data = str(-1)  
                     despachador.publicar_comando_rollback(command, 'response-rollback-create-audit')
                 else:
+                   
+
+                    command = CreateAudit(audit_dto)
+                    execute_command(command)
                     despachador = Despachador()
                     command = CommandResponseCreateAuditJson()
-                    command.data = -1               
+                    command.data = str(-1)             
                     despachador.publicar_comando_respuesta(command, 'response-create-audit')
-
 
             consumer.acknowledge(message)
 
@@ -50,7 +49,7 @@ def suscribe_create_command(app):
         despachador = Despachador()
         command = CommandResponseRollbackCreateAuditJson()
 
-        command.data = -1
+        command.data = str(-1)
         despachador.publicar_comando_rollback(command, 'response-rollback-create-audit')
 
         print(e)
@@ -58,6 +57,16 @@ def suscribe_create_command(app):
     finally:
         if client:
             client.close()
+
+def get_info():
+    audit_dict = {
+                    "location_id": "5a9d0736-11b6-4854-98e4-a297027cfdd9",
+                    "code": "1a",
+                    "score": 90,
+                    "approved_audit": True
+                }
+    
+    return audit_dict
 
 
 def suscribe_delete_command(app):
@@ -79,7 +88,7 @@ def suscribe_delete_command(app):
                 despachador = Despachador()
                 command = CommandResponseRollbackCreateAuditJson()
                 
-                command.data = -1             
+                command.data = str(-1)             
                 despachador.publicar_comando(command, 'response-rollback-create-audit')
             consumer.acknowledge(mensaje)
 

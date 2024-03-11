@@ -1,10 +1,10 @@
-from .mensajes import Mensaje
+from .messages import Message
 from pulsar.schema import *
 
-class ComandoIntegracion(Mensaje):
+class ComandoIntegracion(Message):
     ...
 
-class EventoIntegracion1(Mensaje):
+class EventoIntegracion1(Message):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
