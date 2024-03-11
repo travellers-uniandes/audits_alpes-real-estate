@@ -9,11 +9,7 @@ import pulsar
 from app.seedwork.infrastructure.schema.v1.commands import CommandResponseRollbackCreateAuditJson
 
 
-def suscribe_create_command(app=None):
-    if not app:
-        logging.error('ERROR: Contexto del app no puede ser nulo')
-        return
-
+def suscribe_create_command(app):
     client = None
     try:
         client = pulsar.Client(f'pulsar://{utils.broker_host()}:6650')
@@ -24,9 +20,9 @@ def suscribe_create_command(app=None):
             message = consumer.receive()
             print("Mensaje recibido: {}".format(message.data().decode('utf-8')))
 
-            with app.app_context():
+            with app.test_request_context():
                 audit_dict = {
-                    "location_id": "0ca0f5f3-40fa-4aa4-8117-c9d670eb7ffa",
+                    "location_id": "5a9d0736-11b6-4854-98e4-a297027cfdd9",
                     "code": "1a",
                     "score": 90,
                     "approved_audit": True
@@ -53,7 +49,7 @@ def suscribe_create_command(app=None):
             client.close()
 
 
-def suscribe_delete_command(app=None):
+def suscribe_delete_command(app):
     client = None
     try:
         client = pulsar.Client(f'pulsar://{utils.broker_host()}:6650')
@@ -63,15 +59,17 @@ def suscribe_delete_command(app=None):
         while True:
             mensaje = consumer.receive()
             print("Mensaje recibido: {}".format(mensaje.data().decode('utf-8')))
-            audit_id = "0ca0f5f3-40fa-4aa4-8117-c9d670eb7ffa"
-            command = DeleteAudit(audit_id)
-            execute_command(command)
 
-            despachador = Despachador()
-            command = CommandResponseRollbackCreateAuditJson()
+            with app.test_request_context():
+                audit_id = "5a9d0736-11b6-4854-98e4-a297027cfdd9"
+                command = DeleteAudit(audit_id)
+                execute_command(command)
 
-            command.data = audit_id
-            despachador.publicar_comando(command, 'response-rollback-create-audit')
+                # despachador = Despachador()
+                # command = CommandResponseRollbackCreateAuditJson()
+                #
+                # command.data = audit_id
+                # despachador.publicar_comando(command, 'response-rollback-create-audit')
 
             consumer.acknowledge(mensaje)
 
