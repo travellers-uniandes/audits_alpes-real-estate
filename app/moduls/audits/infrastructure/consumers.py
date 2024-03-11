@@ -27,30 +27,46 @@ def suscribirse_a_comandos():
 
         while True:
             mensaje = consumer.receive()
+            
             print("Mensaje recibido: {}".format(mensaje.data().decode('utf-8')))
-            with app.app_context():
-                db.create_all()
-                print(f"Current app name: {app.name}")
-                entity = Audit()
-                entity.id = str(uuid.uuid4())
-                entity.location_id = 1
-                entity.code = "name"
-                entity.score = 1
-                entity_id_json = json.dumps({"id": entity.id})
-                db.session.add(entity)
-                db.session.commit()
-                db.session.close()
+            consumer.acknowledge(mensaje)
 
-                despachador = Despachador()
-                command = CommandResponseCreateAuditJson()
+            with app.app_context():
+                print(f"Current app name: {app.name}")
                 
-                command.data = entity_id_json               
-                despachador.publicar_comando(command, 'response-create-audit')
+                error = False
+                if error:
+                    despachador = Despachador()
+                    command = CommandResponseRollbackCreateAuditJson()
+                    command.data = "Rollback"
+                    despachador.publicar_comando_rollback(command, 'response-rollback-create-audit')
+                else:
+                    db.create_all()
+                    
+                    entity = Audit()
+                    entity.id = str(uuid.uuid4())
+                    entity.location_id = 1
+                    entity.code = "name"
+                    entity.score = 1
+                    entity_id_json = json.dumps({"id": entity.id})
+                    db.session.add(entity)
+                    db.session.commit()
+                    db.session.close()
+                    despachador = Despachador()
+                    command = CommandResponseCreateAuditJson()
+                    command.data = -1               
+                    despachador.publicar_comando_respuesta(command, 'response-create-audit')
 
             consumer.acknowledge(mensaje)
 
         client.close()
     except Exception as e:
+        despachador = Despachador()
+        command = CommandResponseRollbackCreateAuditJson()
+
+        command.data = "hello im an error form audit" #TODO MB
+        despachador.publicar_comando_rollback(command, 'response-rollback-create-audit')
+
         print(e)
         print('ERROR: Suscribiendose al tópico de comandos!')
     finally:
@@ -74,14 +90,17 @@ def suscribirse_a_comandos_delete():
                 json_data = json.loads(mensaje.data().decode('utf-8'))
                 id_value = json_data.get("id")
 
-                db.session.query(Audit).filter(Audit.id == id_value).delete()
-                db.session.commit()
+                latest_audit = db.session.query(Audit).order_by(Audit.id.desc()).first()
+                if latest_audit:
+                    latest_audit_id = latest_audit.id
+                    db.session.query(Audit).filter(Audit.id == latest_audit_id).delete()
+                    db.session.commit()
                 db.session.close()
 
                 despachador = Despachador()
                 command = CommandResponseRollbackCreateAuditJson()
                 
-                command.data = id_value               
+                command.data =  latest_audit.id               
                 despachador.publicar_comando(command, 'response-rollback-create-audit')
 
             consumer.acknowledge(mensaje)

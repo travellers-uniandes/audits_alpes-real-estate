@@ -3,8 +3,17 @@ from pulsar.schema import *
 
 class ComandoIntegracion(Mensaje):
     ...
-class CommandResponseCreateAuditJson(Record):
-    data = String()
 
-class CommandResponseRollbackCreateAuditJson(Record):
+class EventoIntegracion1(Mensaje):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+class CommandResponseCreateAuditJson(EventoIntegracion1):
     data = String()
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+class CommandResponseRollbackCreateAuditJson(EventoIntegracion1):
+    data = String()
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
