@@ -1,4 +1,3 @@
-import logging
 from app.modules.audits.aplication.commands.delete_audit import DeleteAudit
 from app.modules.audits.aplication.mappers import MapperAuditDTOJson as MapApp
 from app.modules.audits.aplication.commands.create_audit import CreateAudit
@@ -6,8 +5,8 @@ from app.seedwork.aplication.commands import execute_command
 from app.modules.audits.infrastructure.dispachers import Despachador
 from app.seedwork.infrastructure import utils
 import pulsar
-
-from app.seedwork.infrastructure.schema.v1.comandos import CommandResponseCreateAuditJson, CommandResponseRollbackCreateAuditJson
+from app.seedwork.infrastructure.schema.v1.comandos import CommandResponseCreateAuditJson, \
+    CommandResponseRollbackCreateAuditJson
 
 
 def suscribe_create_command(app):
@@ -25,21 +24,18 @@ def suscribe_create_command(app):
                 audit_dict = get_info()
                 map_audit = MapApp()
                 audit_dto = map_audit.external_to_dto(audit_dict)
-                error = True
-                if error:                    
-                    
+                error = False
+                if error:
                     despachador = Despachador()
                     command = CommandResponseRollbackCreateAuditJson()
-                    command.data = str(-1)  
+                    command.data = str(-1)
                     despachador.publicar_comando_rollback(command, 'response-rollback-create-audit')
                 else:
-                   
-
                     command = CreateAudit(audit_dto)
                     execute_command(command)
                     despachador = Despachador()
                     command = CommandResponseCreateAuditJson()
-                    command.data = str(-1)             
+                    command.data = str(-1)
                     despachador.publicar_comando_respuesta(command, 'response-create-audit')
 
             consumer.acknowledge(message)
@@ -58,14 +54,14 @@ def suscribe_create_command(app):
         if client:
             client.close()
 
+
 def get_info():
     audit_dict = {
-                    "location_id": "5a9d0736-11b6-4854-98e4-a297027cfdd9",
-                    "code": "1a",
-                    "score": 90,
-                    "approved_audit": True
-                }
-    
+        "location_id": "5a9d0736-11b6-4854-98e4-a297027cfdd9",
+        "code": "1a",
+        "score": 90,
+        "approved_audit": True
+    }
     return audit_dict
 
 
@@ -87,8 +83,8 @@ def suscribe_delete_command(app):
 
                 despachador = Despachador()
                 command = CommandResponseRollbackCreateAuditJson()
-                
-                command.data = str(-1)             
+
+                command.data = str(-1)
                 despachador.publicar_comando(command, 'response-rollback-create-audit')
             consumer.acknowledge(mensaje)
 
