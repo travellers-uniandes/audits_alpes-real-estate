@@ -5,11 +5,3 @@ from pulsar.schema import *
 
 class IntegrationCommand(Message):
     ...
-
-
-class CommandResponseCreateAuditJson(Record, DomainEvent):
-    data = String()
-
-
-class CommandResponseRollbackCreateAuditJson(Record):
-    data = String()

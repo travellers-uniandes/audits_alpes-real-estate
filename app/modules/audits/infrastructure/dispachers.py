@@ -1,7 +1,10 @@
 import json
 import pulsar
+from pulsar.schema import *
 from app.seedwork.infrastructure import utils
 import datetime
+
+from app.seedwork.infrastructure.schema.v1.comandos import CommandResponseCreateAuditJson, CommandResponseRollbackCreateAuditJson
 
 epoch = datetime.datetime.utcfromtimestamp(0)
 
@@ -23,4 +26,16 @@ class Despachador:
         publicador = cliente.create_producer(topico)
         serialized_data = json.dumps(comando.data).encode('utf-8')
         publicador.send(serialized_data)
+        publicador.close()
+
+    def publicar_comando_respuesta(self, comando, topico):
+        cliente = pulsar.Client(f'pulsar://{utils.broker_host()}:6650')
+        publicador = cliente.create_producer(topico, schema=AvroSchema(CommandResponseCreateAuditJson)  )  
+        publicador.send(comando)
+        publicador.close()
+
+    def publicar_comando_rollback(self, comando, topico):
+        cliente = pulsar.Client(f'pulsar://{utils.broker_host()}:6650')
+        publicador = cliente.create_producer(topico, schema=AvroSchema(CommandResponseRollbackCreateAuditJson))     
+        publicador.send(comando)
         publicador.close()

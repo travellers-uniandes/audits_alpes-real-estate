@@ -6,7 +6,8 @@ from app.seedwork.aplication.commands import execute_command
 from app.modules.audits.infrastructure.dispachers import Despachador
 from app.seedwork.infrastructure import utils
 import pulsar
-from app.seedwork.infrastructure.schema.v1.commands import CommandResponseRollbackCreateAuditJson
+
+from app.seedwork.infrastructure.schema.v1.comandos import CommandResponseCreateAuditJson, CommandResponseRollbackCreateAuditJson
 
 
 def suscribe_create_command(app):
@@ -21,32 +22,51 @@ def suscribe_create_command(app):
             print("Mensaje recibido: {}".format(message.data().decode('utf-8')))
 
             with app.test_request_context():
-                audit_dict = {
-                    "location_id": "5a9d0736-11b6-4854-98e4-a297027cfdd9",
-                    "code": "1a",
-                    "score": 90,
-                    "approved_audit": True
-                }
+                audit_dict = get_info()
                 map_audit = MapApp()
                 audit_dto = map_audit.external_to_dto(audit_dict)
-                command = CreateAudit(audit_dto)
-                execute_command(command)
+                error = True
+                if error:                    
+                    
+                    despachador = Despachador()
+                    command = CommandResponseRollbackCreateAuditJson()
+                    command.data = str(-1)  
+                    despachador.publicar_comando_rollback(command, 'response-rollback-create-audit')
+                else:
+                   
 
-                # despachador = Despachador()
-                # command = CommandResponseCreateAuditJson()
-                #
-                # command.data = entity_id_json
-                # despachador.publicar_comando(command, 'response-create-audit')
+                    command = CreateAudit(audit_dto)
+                    execute_command(command)
+                    despachador = Despachador()
+                    command = CommandResponseCreateAuditJson()
+                    command.data = str(-1)             
+                    despachador.publicar_comando_respuesta(command, 'response-create-audit')
 
             consumer.acknowledge(message)
 
         client.close()
     except Exception as e:
+        despachador = Despachador()
+        command = CommandResponseRollbackCreateAuditJson()
+
+        command.data = str(-1)
+        despachador.publicar_comando_rollback(command, 'response-rollback-create-audit')
+
         print(e)
         print('ERROR: Suscribiéndose al tópico de comandos!')
     finally:
         if client:
             client.close()
+
+def get_info():
+    audit_dict = {
+                    "location_id": "5a9d0736-11b6-4854-98e4-a297027cfdd9",
+                    "code": "1a",
+                    "score": 90,
+                    "approved_audit": True
+                }
+    
+    return audit_dict
 
 
 def suscribe_delete_command(app):
@@ -61,16 +81,15 @@ def suscribe_delete_command(app):
             print("Mensaje recibido: {}".format(mensaje.data().decode('utf-8')))
 
             with app.test_request_context():
-                audit_id = "5a9d0736-11b6-4854-98e4-a297027cfdd9"
+                audit_id = -1
                 command = DeleteAudit(audit_id)
                 execute_command(command)
 
-                # despachador = Despachador()
-                # command = CommandResponseRollbackCreateAuditJson()
-                #
-                # command.data = audit_id
-                # despachador.publicar_comando(command, 'response-rollback-create-audit')
-
+                despachador = Despachador()
+                command = CommandResponseRollbackCreateAuditJson()
+                
+                command.data = str(-1)             
+                despachador.publicar_comando(command, 'response-rollback-create-audit')
             consumer.acknowledge(mensaje)
 
         client.close()
